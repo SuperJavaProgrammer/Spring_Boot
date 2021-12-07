@@ -1,0 +1,101 @@
+http://repo.spring.io/release/org/springframework/boot/spring-boot-cli/ установить CLI
+
+    run позволяетзапускать Java- или Groovy-приложения Spring Boot.
+spring run [опции] <файлы> [--] [аргументы]
+spring run app.groovy
+spring run app.groovy -- --server.port=8888 команда запускает веб-приложение, причем оно прослушивает на порте 8888
+spring run -ср lib/mylib.jar app.groovy если нужно добавить какую-либо стороннюю библиотеку и загрузить зависимости
+spring run WebApp.java
+spring run *.groovy Для компиляции нескольких файлов
+Опции:
+--autoconfigure[Boolean] Добавляет автоконфигурацию преобразований компилятора.
+Запоминает возможности автоконфигурации и нюансы работы
+с помощью добавления аннотации @EnableAutoConfiguration
+или составных аннотаций @SpringBootApplication.
+--classpath, -ср  Добавляет элементы пути к классам; удобна в случае наличия 
+сторонних библиотек. Могу порекомендовать вам создать подкаталог
+lib/ в корневом каталоге своей программы и добавить туда все классы/JAR-файлы
+--no-guessdependencies Не пытается предугадывать зависимости. Удобно, если в приложении
+уже используется аннотация ©Grab
+--no-guessimports Не пытается предугадывать, что нужно импортировать. Удобно, если
+вы уже включили часть импортов в приложение Groovy. Например,
+эту опцию можно использовать в приложении Java, поскольку все
+необходимые классы уже импортируются
+-q, --quiet Останавливает журналирование. Другими словами, в консоль ничего
+выводиться не будет
+-v, -verbose Выводит в журнал все, что только можно. Полезно для отладки,
+поскольку показывает диагностическую информацию для кода и все
+добавленное в программу. 
+-watch Отслеживает изменения в заданном файле (файлах). Полезно, чтобы
+лишний раз не останавливать и не запускать приложение снова
+
+    test позволяет запускать сценарии Spring Groovy //Текущая версия Spring Boot CLI (по-видимому, начиная с версии 2.0.0) больше не поддерживает команду test
+spring test [опции] <файлы> [--] [аргументы]
+Опции: 4 как выше
+
+    grab скачивает все сценарии Spring Groovy и зависимости Java в каталог ./repository
+spring grab [опции] <файлы> [--] [аргументы]
+Опции: 4 как выше
+spring grab MyTest.java
+
+    jar создает автономный исполняемый JAR-файл на основе Groovyили Java-сценария
+spring jar [опции] <название jar> <файлы>
+Опции: 4 как выше +
+--exclude Паттерн для поиска файлов, которые нужно исключить из итогового JAR-файла
+--include Паттерн для поиска файлов, которые нужно включить в итоговый JAR-файл
+spring jar арр.jar app.groovy появилось два файла — один с названием арр. jar.original, а второй — арр. jar
+java -jar app.jar будет запущено веб-приложение
+
+    war создает автономный исполняемый WAR-файл на основе Groovy- или Java-сценария
+spring war [опции] <название war> <файлы>
+Опции: 6 как выше
+spring war app.war app.groovy появилось два файла — один с названием app.war.original, а второй — app.war
+java -jar app.war WAR-файл можно использовать в уже существующих контейнерах приложений, например, tcServer от
+Pivotal, Tomcat, WebSphere,Jetty
+
+    install очень похожа на команду grab; единственное отличие — необходимо указать, какую библиотеку устанавливать (в формате coordinate, то есть groupld: artifactld: version; аналогично аннотации @Grab). После этого команда install скачивает библиотеку и зависимости в каталог lib
+spring install [опции] <координаты>
+Опции:
+--autoconfigure [Boolean] 
+--classpath, -ср
+--no-guess-dependencies
+--no-guess-imports
+
+    uninstall удаляет зависимости из каталога lib
+spring uninstall [опции] <координаты>
+Опции: 4 как выше
+
+    init помогает в создании новых проектов с помощью Spring Initializr (http://start.spring.io/)
+spring init [опции] [местоположение]
+много опций
+-а, --artifactld
+-b, --boot-version
+--build
+-d, --dependencies
+-description
+-f, --force
+--format
+-g, --groupld
+-j, --java-version
+-l, -language
+-n, --name
+-p, --packaging
+--package-name
+-t, --type
+--target
+-v, --version
+-x, --extract
+spring init Для создания проекта по умолчанию
+spring init -d=web,jdbc --build=gradle создает веб-приложениеJDBC с типом проекта Gradle
+spring init -d=web,data-jpa,security --format=build --build=gradle сгенерировать только файл pom.xml (для проекта Maven) или файл build.gradle (для проекта Gradle)
+spring init -d=amqp -g=com.apress.spring -a=spring-boot-rabbitmq -name=spring-boot-rabbitmq Для создания проекта с названием, groupld и artifactld. Эта команда создаст файл spring-boot-rabbitmq. zip (проект Maven) с заданными groupld и artifactld
+spring init -d=web,thymeleaf,data-jpa,data-rest,security -g=com.apress.spring -a=spring-boot-journal-oauth --package-name=com.apress.spring -name=spring-boot-journal-oauth Для добавления конкретного названия пакета
+spring init --list узнать больше о зависимостях или других значениях параметров
+
+    shell запускает встроенную командную оболочку, включает описанные выше команды, но выполняемые во встроенной
+командной оболочке. Одно из ее преимуществ — наличие автодополнения табуляцией, что позволяет получить все возможные варианты опций
+$ spring shell
+
+    help — ваш главный помощник
+spring help
+spring help init узнать больше о команде init
